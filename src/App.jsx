@@ -1,95 +1,104 @@
 import { useState } from 'react'
 import './App.css'
-// Asegúrate de tener la imagen en la carpeta src/assets/
-import fotoPerfil from './assets/foto.png' 
+import fotoPerfil from './assets/foto1.webp' 
 
 function App() {
+  const [selectedService, setSelectedService] = useState(null);
+
   const contactData = {
-    name: "Rafaela Sánchez Escobedo",
-    specialty: "Licenciada en Enfermería",
-    phone: "+524871264336",
-    email: "rafa-ela98@outlook.com",
-    location: "Rioverde, San Luis Potosí, México",
-    whatsappMsg: "Hola, me gustaría agendar una consulta médica.",
-    // Nuevos datos de servicios
+    name: "Giancarlo Salazar Rivera",
+    title: "Desarrollo Web & Diseño Digital",
+    phone: "+524871137531",
+    email: "gsrdesign10@gmail.com",
+    location: "Rioverde, SLP, México",
+    whatsappMsg: "Hola Giancarlo, solicito información sobre el servicio de: ",
     services: [
-      "Cuidados Post-operatorios",
-      "Aplicación de Inyecciones",
-      "Terapia Intravenosa",
-      "Curación de Heridas",
-      "Monitoreo de Signos Vitales",
-      "Cateterismo y Sondas"
+      { 
+        title: "Sitios Web", 
+        desc: "Desarrollo de páginas web de alta gama, optimizadas para velocidad, SEO y conversión. Diseñadas para proyectar una imagen profesional y sólida de tu empresa." 
+      },
+      { 
+        title: "Tarjetas Digitales Pro", 
+        desc: "Lleva tu networking al siguiente nivel. Una tarjeta interactiva con botones de llamada, WhatsApp y redes sociales, siempre disponible en tu celular." 
+      },
+      { 
+        title: "Invitaciones Digitales", 
+        desc: "Experiencias digitales para eventos exclusivos. Incluyen confirmación vía WhatsApp, mapa con GPS, cuenta regresiva y galería de fotos." 
+      },
+      { 
+        title: "Estrategia de Interfaz (UX)", 
+        desc: "Análisis profundo de cómo tus clientes interactúan con tu sitio para mejorar la navegación, reducir el abandono y aumentar tus ventas digitales." 
+      }
     ]
   };
 
-  const handleCall = () => {
-    window.location.href = `tel:${contactData.phone}`;
-  };
-
-  const handleWhatsApp = () => {
-    const url = `https://wa.me/${contactData.phone.replace('+', '')}?text=${encodeURIComponent(contactData.whatsappMsg)}`;
+  const handleCall = () => window.location.href = `tel:${contactData.phone}`;
+  
+  const handleWhatsApp = (serviceTitle = "") => {
+    const msg = serviceTitle ? `${contactData.whatsappMsg} ${serviceTitle}` : contactData.whatsappMsg;
+    const url = `https://wa.me/${contactData.phone.replace('+', '')}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <div className="card-header">
-          <div className="profile-img-container">
-            <img 
-              src={fotoPerfil} 
-              alt={contactData.name} 
-              className="profile-img-file" 
-            />
+    <div className="elegant-wrapper">
+      <div className="elegant-card">
+        <header className="elegant-header">
+          <div className="frame">
+            <img src={fotoPerfil} alt={contactData.name} className="elegant-avatar" />
           </div>
-        </div>
-        
-        <div className="card-body">
-          <h1 className="name">{contactData.name}</h1>
-          <p className="specialty">{contactData.specialty}</p>
+          <h1 className="elegant-name">{contactData.name}</h1>
+          <p className="elegant-subtitle">{contactData.title}</p>
+        </header>
 
-          {/* Nueva Sección de Servicios */}
-          <div className="services-container">
-            {contactData.services.map((service, index) => (
-              <span key={index} className="service-tag">{service}</span>
-            ))}
-          </div>
-          
-          <div className="divider"></div>
-          
-          <div className="info-section">
-            <div className="info-item" onClick={handleCall} style={{cursor: 'pointer'}}>
-              <span className="icon">📞</span>
-              <p>{contactData.phone}</p>
-            </div>
-            <div className="info-item">
-              <span className="icon">📧</span>
-              <p>{contactData.email}</p>
-            </div>
-            <div className="info-item">
-              <span className="icon">📍</span>
-              <p>{contactData.location}</p>
+        <main className="elegant-body">
+          <div className="services-nav">
+            <p className="section-title">Nuestros Servicios</p>
+            <div className="elegant-grid">
+              {contactData.services.map((service, index) => (
+                <button 
+                  key={index} 
+                  className="elegant-tag" 
+                  onClick={() => setSelectedService(service)}
+                >
+                  {service.title}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
 
-        <div className="card-footer">
-          <button className="btn-contact" onClick={handleCall}>
-            Llamar ahora
+          <div className="elegant-divider"></div>
+
+          <div className="contact-minimal">
+            <div className="contact-link" onClick={handleCall}>
+              <span className="dot"></span> {contactData.phone}
+            </div>
+            <div className="contact-link">
+              <span className="dot"></span> {contactData.email}
+            </div>
+          </div>
+        </main>
+
+        <footer className="elegant-footer">
+          <button className="gold-button" onClick={() => handleWhatsApp()}>
+            Agendar Consultoría
           </button>
-        </div>
+        </footer>
       </div>
 
-      <div className="floating-actions">
-        <button onClick={handleWhatsApp} className="fab whatsapp" title="Enviar WhatsApp">
-          <svg viewBox="0 0 448 512" width="25" height="25" fill="currentColor">
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.1 0-65.6-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.1-3.2-5.5-.3-8.5 2.4-11.3 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.5 5.5-9.2 1.9-3.7 1-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.2 31.6 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
-          </svg>
-        </button>
-        <button onClick={handleCall} className="fab call" title="Llamar">
-          <span className="fab-icon">📞</span>
-        </button>
-      </div>
+      {/* Modal Desplegable */}
+      {selectedService && (
+        <div className="modal-overlay" onClick={() => setSelectedService(null)}>
+          <div className="elegant-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="x-close" onClick={() => setSelectedService(null)}>&times;</button>
+            <h3 className="modal-title">{selectedService.title}</h3>
+            <p className="modal-desc">{selectedService.desc}</p>
+            <button className="modal-cta" onClick={() => handleWhatsApp(selectedService.title)}>
+              Preguntar por este servicio
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
